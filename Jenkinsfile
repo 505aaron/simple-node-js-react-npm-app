@@ -7,19 +7,23 @@ pipeline {
 
   }
   stages {
-    stage('build') {
-      sh 'npm install'
+    stage('Build') {
+      steps {
+        sh 'npm install'
+      }
     }
-
     milestone 1
-    stage('dev003') {
-      lock(resource: 'staging-server', inversePrecedence: true) {
-            milestone 2
-            node {
-                echo 'Deploying'
-            }
-            input message: "Does dev003 look good?"
-        }
+    stage('Test') {
+      steps {
+        sh './jenkins/scripts/test.sh'
+      }
+    }
+    stage('Deliver') {
+      steps {
+        sh './jenkins/scripts/deliver.sh'
+        input 'Finished using the web site? (Click "Proceed" to continue)'
+        sh './jenkins/scripts/kill.sh'
+      }
     }
   }
   environment {
