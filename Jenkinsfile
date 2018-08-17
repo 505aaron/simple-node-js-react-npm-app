@@ -17,10 +17,31 @@ pipeline {
         sh './jenkins/scripts/test.sh'
       }
     }
-    stage('Deliver') {
+    stage('dev003') {
       steps {
+        input 'Deploy'
         sh './jenkins/scripts/deliver.sh'
-        input 'Finished using the web site? (Click "Proceed" to continue)'
+        sh './jenkins/scripts/kill.sh'
+      }
+    }
+    stage('int003') {
+      steps {
+        input 'Deploy'
+        sh './jenkins/scripts/deliver.sh'
+        sh './jenkins/scripts/kill.sh'
+      }
+    }
+    stage('stg003') {
+      steps {
+        input 'Deploy'
+        sh './jenkins/scripts/deliver.sh'
+        sh './jenkins/scripts/kill.sh'
+      }
+    }
+   stage('prod003') {
+      steps {
+        input 'Deploy'
+        sh './jenkins/scripts/deliver.sh'
         sh './jenkins/scripts/kill.sh'
       }
     }
