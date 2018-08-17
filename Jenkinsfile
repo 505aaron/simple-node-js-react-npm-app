@@ -8,6 +8,7 @@ pipeline {
   }
   stages {
     stage('Build') {
+      milestone()
       steps {
         sh 'npm install'
       }
@@ -16,33 +17,26 @@ pipeline {
       steps {
         sh './jenkins/scripts/test.sh'
       }
+      milestone()
     }
-    stage('dev003') {
-      steps {
-        input 'Deploy'
-        sh './jenkins/scripts/deliver.sh'
-        sh './jenkins/scripts/kill.sh'
+    lock(resource: 'dev', inversePrecedence: true){
+      node('test') {
+        stage('dev003') {
+          steps {
+            input 'Deploy'
+            milestone()
+          }
+        }
       }
     }
-    stage('int003') {
-      steps {
-        input 'Deploy'
-        sh './jenkins/scripts/deliver.sh'
-        sh './jenkins/scripts/kill.sh'
-      }
-    }
-    stage('stg003') {
-      steps {
-        input 'Deploy'
-        sh './jenkins/scripts/deliver.sh'
-        sh './jenkins/scripts/kill.sh'
-      }
-    }
-   stage('prod003') {
-      steps {
-        input 'Deploy'
-        sh './jenkins/scripts/deliver.sh'
-        sh './jenkins/scripts/kill.sh'
+    lock(resource: 'dev', inversePrecedence: true){
+      node('test') {
+        stage('dev003') {
+          steps {
+            input 'Deploy'
+            milestone()
+          }
+        }
       }
     }
   }
