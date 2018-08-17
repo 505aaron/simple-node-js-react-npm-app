@@ -20,7 +20,7 @@ pipeline {
       milestone()
     }
     lock(resource: 'dev', inversePrecedence: true){
-      node('test') {
+      node('dev') {
         stage('dev003') {
           steps {
             input 'Deploy'
@@ -29,9 +29,9 @@ pipeline {
         }
       }
     }
-    lock(resource: 'dev', inversePrecedence: true){
-      node('test') {
-        stage('dev003') {
+    lock(resource: 'int', inversePrecedence: true){
+      node('int') {
+        stage('int003') {
           steps {
             input 'Deploy'
             milestone()
