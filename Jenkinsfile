@@ -16,14 +16,15 @@ pipeline {
       steps {
         milestone 1
         sh './jenkins/scripts/test.sh'
+        input 'Test'
       }
     }
     stage('Deliver') {
-        steps {
-          sh './jenkins/scripts/deliver.sh'
-          input 'Finished using the web site? (Click "Proceed" to continue)'
-          sh './jenkins/scripts/kill.sh'
-        }
+      steps {
+        sh './jenkins/scripts/deliver.sh'
+        input 'Finished using the web site? (Click "Proceed" to continue)'
+        sh './jenkins/scripts/kill.sh'
+      }
     }
   }
   environment {
