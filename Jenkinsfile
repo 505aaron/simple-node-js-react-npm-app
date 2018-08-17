@@ -12,9 +12,9 @@ pipeline {
         sh 'npm install'
       }
     }
-    milestone 1
     stage('Test') {
       steps {
+        milestone 1
         sh './jenkins/scripts/test.sh'
       }
     }
