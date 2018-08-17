@@ -1,40 +1,16 @@
-pipeline {
-  agent {
-    docker {
-      image 'node:6-alpine'
-      args '-p 3000:3000'
-    }
+stage('build') {
+  node {
+    sh 'npm install'
+  }
+}
 
-  }
-  stages {
-    stage('Build') {
-      milestone()
-      node {
-        steps {
-          sh 'npm install'
+milestone 1
+stage('dev003') {
+  lock(resource: 'staging-server', inversePrecedence: true) {
+        milestone 2
+        node {
+            echo 'Deploying'
         }
-      }
+        input message: "Does dev003 look good?"
     }
-    stage('Test') {
-      node {
-        steps {
-          sh './jenkins/scripts/test.sh'
-        }
-      }
-      milestone()
-    }
-    lock(resource: 'dev', inversePrecedence: true){
-      node('dev') {
-        stage('dev003') {
-          steps {
-            input 'Deploy'
-            milestone()
-          }
-        }
-      }
-    }
-  }
-  environment {
-    CI = 'true'
-  }
 }
