@@ -6,12 +6,9 @@ pipeline {
     }
 
   }
-stages {
-
+  stages {
     stage('build') {
-      node {
-        sh 'npm install'
-      }
+      sh 'npm install'
     }
 
     milestone 1
@@ -24,8 +21,8 @@ stages {
             input message: "Does dev003 look good?"
         }
     }
-}
-    environment {
+  }
+  environment {
     CI = 'true'
-}
+  }
 }
